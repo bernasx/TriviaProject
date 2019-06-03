@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>difficultyArray</key>
+	<array>
+		<string>Any Difficulty</string>
+		<string>Easy</string>
+		<string>Medium</string>
+		<string>Hard</string>
+	</array>
+	<key>difficultyDict</key>
+	<dict>
+		<key>Any Difficulty</key>
+		<string></string>
+		<key>Easy</key>
+		<string>easy</string>
+		<key>Medium</key>
+		<string>medium</string>
+		<key>Hard</key>
+		<string>hard</string>
+	</dict>
+	<key>typeArray</key>
+	<array>
+		<string>Any Type</string>
+		<string>Multiple Choice</string>
+		<string>True / False</string>
+	</array>
+	<key>typeDict</key>
+	<dict>
+		<key>Any Type</key>
+		<string></string>
+		<key>Multiple Choice</key>
+		<string>multiple</string>
+		<key>True / False</key>
+		<string>boolean</string>
+	</dict>
+	<key>categoryArray</key>
+	<array>
+		<string>Any</string>
+		<string>General Knowledge</string>
+		<string>Entertainment: Books</string>
+		<string>Entertainment: Film</string>
+		<string>Entertainment: Music</string>
+		<string>Entertainment: Musicals &amp; Theaters</string>
+		<string>Entertainment: Television</string>
+		<string>Entertainment: Video Games</string>
+		<string>Entertainment: Board Games</string>
+		<string>Science &amp; Nature</string>
+		<string>Science: Computers</string>
+		<string>Science: Mathematics</string>
+		<string>Mythology</string>
+		<string>Sports</string>
+		<string>Geography</string>
+		<string>History</string>
+		<string>Politics</string>
+		<string>Art</string>
+		<string>Celebrities</string>
+		<string>Animals</string>
+		<string>Vehicles</string>
+		<string>Entertainment: Comics</string>
+		<string>Science: Gadgets</string>
+		<string>Entertainment: Japanese Anime &amp; Manga</string>
+		<string>Entertainment: Cartoon &amp; Animations</string>
+	</array>
+	<key>categoryDict</key>
+	<dict>
+		<key>Any</key>
+		<string></string>
+		<key>General Knowledge</key>
+		<string>9</string>
+		<key>Entertainment: Books</key>
+		<string>10</string>
+		<key>Entertainment: Film</key>
+		<string>11</string>
+		<key>Entertainment: Music</key>
+		<string>12</string>
+		<key>Entertainment: Musicals &amp; Theaters</key>
+		<string>13</string>
+		<key>Entertainment: Television</key>
+		<string>14</string>
+		<key>Entertainment: Video Games</key>
+		<string>15</string>
+		<key>Entertainment: Board Games</key>
+		<string>16</string>
+		<key>Science &amp; Nature</key>
+		<string>17</string>
+		<key>Science: Computers</key>
+		<string>18</string>
+		<key>Science: Mathematics</key>
+		<string>19</string>
+		<key>Mythology</key>
+		<string>20</string>
+		<key>Sports</key>
+		<string>21</string>
+		<key>Geography</key>
+		<string>22</string>
+		<key>History</key>
+		<string>23</string>
+		<key>Politics</key>
+		<string>24</string>
+		<key>Art</key>
+		<string>25</string>
+		<key>Celebrities</key>
+		<string>26</string>
+		<key>Animals</key>
+		<string>27</string>
+		<key>Vehicles</key>
+		<string>28</string>
+		<key>Entertainment: Comics</key>
+		<string>29</string>
+		<key>Science: Gadgets</key>
+		<string>30</string>
+		<key>Entertainment: Japanese Anime &amp; Manga</key>
+		<string>31</string>
+		<key>Entertainment: Cartoon &amp; Animations</key>
+		<string>32</string>
+	</dict>
+</dict>
+</plist>
