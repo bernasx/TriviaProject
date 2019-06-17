@@ -13,8 +13,7 @@ class CustomCellLabel: UILabel {
         self.padding = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         
     }
-}
-extension UILabel {
+    
     private struct AssociatedKeys {
         static var padding = UIEdgeInsets()
     }

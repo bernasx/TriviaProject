@@ -41,6 +41,8 @@ class GameViewController: UIViewController {
     var gameObject: JsonResults?
     var currentQuestion: Int = 0
     var score: Int = 0
+    var wrongAnswers: Int = 0
+    let statsManager = StatManager()
     @IBOutlet weak var lblQuestion: UILabel!
     @IBOutlet var buttonCollection: [UIButton]!
     @IBOutlet weak var lblScore: ScoreLabel!
@@ -70,6 +72,7 @@ class GameViewController: UIViewController {
 
     //botao de proxima pergunta, verifica o estado do jogo e termina depois do numero de perguntas
     @IBAction func btnNext(_ sender: UIButton) {
+        self.statsManager.updateTotalAnswers()
         btnNext.isEnabled = false
         if currentQuestion < gameObject!.results.count{
             self.setScore()
@@ -80,6 +83,7 @@ class GameViewController: UIViewController {
             self.setScore()
             let alert = UIAlertController(title: "Game Finished", message: "", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+                self.statsManager.updateGamesPlayed()
                 NSLog("The \"OK\" alert occured.")
                 self.performSegue(withIdentifier: "gameFinished", sender: self)
             }))
@@ -141,7 +145,13 @@ class GameViewController: UIViewController {
                 //-----------
                 if button.titleLabel?.text == gameObject?.results[currentQuestion-1].correct_answer.htmlDecoded{
                     score = score + 1
-                    lblScore.text = "Score: \(score)/\(gameObject!.results.count)"
+                    lblScore.text = "\(score) √ | X \(wrongAnswers)"
+                    self.statsManager.updateCorrectAnswers()
+                }
+                else{
+                    wrongAnswers = wrongAnswers + 1
+                    lblScore.text = "\(score) √ | X \(wrongAnswers)"
+
                 }
             }
         }
@@ -179,6 +189,7 @@ class GameViewController: UIViewController {
     //screen start
     override func viewDidLoad() {
         super.viewDidLoad()
+        lblScore.text = "\(score) √ | X \(wrongAnswers)"
         btnNext.isEnabled = false
         self.buttonCollection.forEach{
             button in

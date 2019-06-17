@@ -8,12 +8,19 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     @IBOutlet weak var typeTextField: UITextField!
     @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
+    @IBOutlet weak var welcomeLbl: UILabel!
+    @IBOutlet weak var totalGamesLbl: UILabel!
+    @IBOutlet weak var totalAnswersLbl: UILabel!
+    @IBOutlet weak var correctAnswersLbl: UILabel!
+    @IBOutlet weak var percentageAnswersLbl: UILabel!
+    @IBOutlet weak var mostPlayedCatLbl: UILabel!
     
     var selectedTextFieldValues: [UITextField?: Int] = [:] // guarda os ultimos valores selecionados
     var optionTypes: [String] = []
     var selectedTextField : UITextField?
     var gameConfig: gameConfigArrs? = nil // objeto que contem todos os arrays e dicts para construir os pickers
-    
+    let statsManager = StatManager()
+
     //textField e Button vents
     @IBAction func onDifficultyClick(_ sender: UITextField) {
         selectedTextField = sender
@@ -32,14 +39,25 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         createPickerView()
     }
     @IBAction func onStartClick(_ sender: UIButton) {
+        let category = categoryTextField.text!
+            //tem q se mudar para nao crashar
+            print(category)
+            statsManager.updateCategory(category: category)
+        
+        verifyAmount()
         performSegue(withIdentifier: "gameSegue", sender: self)//faz um segue com o identifier gamesegue
+        
     }
     //se os valores inseridos forem maiores que 50 ou menores que 10, corrige
     @IBAction func amountVerify(_ sender: UITextField) {
-        guard var value = Int(sender.text!) else {return}
+        verifyAmount()
+    }
+    
+    func verifyAmount(){
+        guard var value = Int(amountTextField.text!) else {return}
         value = value < 10 ? 10 : value
         value = value > 50 ? 50 : value
-        sender.text! = String(value)
+        amountTextField.text! = String(value)
         print(value)
     }
     //--------------
@@ -133,7 +151,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         if(type != ""){
             components.queryItems?.append(URLQueryItem(name:"type",value:type!))
         }
-//        components.queryItems?.append(URLQueryItem(name:"encode",value:"url3986"))
         return components.url!
     }
     
@@ -144,10 +161,74 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         reader()
         selectedTextFieldValues = [difficultyTextField: 0,typeTextField: 0,categoryTextField: 0]
         navigationItem.hidesBackButton = true
+        updateStats()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        updateStats()
+    }
+    
+    //vai buscar informaçoes atualizadas a base de dados
+    func updateStats(){
+        var percentageCorrectAnswers: Float = 0.00
+        var totals: Float = 0.00
+        var corrects: Float = 0.00
+        //get username
+        statsManager.displayUsername(completionHandler: { (username, error) in
+            let welcome: NSMutableAttributedString = NSMutableAttributedString(string: "Welcome to TriviApp " + username)
+            welcome.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.lightGray , range: NSRange(location: 20, length: username.count))
+            self.welcomeLbl.attributedText = welcome
+//            self.welcomeLbl.attributedText = "Welcome to TriviApp \(username)"
+            
+        })
+        //get games played
+        statsManager.getGamesPlayed(completionHandler: { (gamesPlayed, error) in
+            let gamesP: NSMutableAttributedString = NSMutableAttributedString(string: "Games Played: " + gamesPlayed)
+            gamesP.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.lightGray , range: NSRange(location: 14, length: gamesPlayed.count))
+            self.totalGamesLbl.attributedText = gamesP
+//            self.totalGamesLbl.attributedText = "Games Played: \(gamesPlayed)"
+            
+        })
+        
+        statsManager.getTotalAnswers(completionHandler: { (totalAnswers, error) in
+            let totalA: NSMutableAttributedString = NSMutableAttributedString(string:"Total Answers: " + totalAnswers)
+            totalA.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.lightGray, range: NSRange(location:15, length: totalAnswers.count))
+            self.totalAnswersLbl.attributedText = totalA
+            totals = Float(totalAnswers)!
+        })
+        
+        statsManager.getCorrectAnswers(completionHandler: { (correctAnswers, error) in
+            let correctA: NSMutableAttributedString = NSMutableAttributedString(string:"Correct Answers: " + correctAnswers)
+            correctA.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.lightGray, range: NSRange(location:17, length: correctAnswers.count))
+            self.correctAnswersLbl.attributedText = correctA
+            corrects = Float(correctAnswers)!
+            
+            //percentage label
+            if totals > 0.0{
+                percentageCorrectAnswers = corrects / totals
+                let twoDecimalPlaces = String(format: "%.2f", percentageCorrectAnswers)
+                let tempString = "\(twoDecimalPlaces)%"
+                let percentageA: NSMutableAttributedString = NSMutableAttributedString(string:"Correct Ratio: " + tempString)
+                percentageA.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.lightGray, range: NSRange(location: 15 ,length: tempString.count))
+                self.percentageAnswersLbl.attributedText = percentageA
+            }else{
+                let tempString = "0%"
+                let percentageA: NSMutableAttributedString = NSMutableAttributedString(string:"Correct Ratio: " + tempString)
+                percentageA.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.lightGray, range: NSRange(location: 15 ,length: tempString.count))
+                self.percentageAnswersLbl.attributedText = percentageA
+            }
+        })
+        
+        statsManager.getFavoriteCategory { (favoriteCategory, error) in
+            let favoriteC: NSMutableAttributedString = NSMutableAttributedString(string: "Favorite Category: " + favoriteCategory)
+            favoriteC.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.lightGray, range: NSRange(location: 19, length: favoriteCategory.count))
+            self.mostPlayedCatLbl.attributedText = favoriteC
         }
+    }
 }
